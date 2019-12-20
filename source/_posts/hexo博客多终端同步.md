@@ -1,7 +1,7 @@
 ---
 title: hexo博客多终端同步
 date: 2019-12-19 22:43:52
-tags:blog
+tags: blog
 ---
 
 ## 首先要先建立好基本的单终端博客
