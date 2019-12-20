@@ -16,13 +16,13 @@ tags: blog
 
 **坑1：**注意想用自定义theme最好不要从github上直接克隆下来，而是以压缩包形式下载到对应theme文件夹后再解压。这对之后的多终端同步有好处
 
+<!--more-->
+
 ### 2.另一个（或者之后的其他）终端需要提前配一下环境
 
 ​		参考[链接]([https://oceandlnu.github.io/2017/03/06/GitHub+Hexo%E5%8D%9A%E5%AE%A2%E5%A4%9A%E7%BB%88%E7%AB%AF%E5%90%8C%E6%AD%A5[%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C\]/](https://oceandlnu.github.io/2017/03/06/GitHub+Hexo博客多终端同步[准备工作]/))
 
 ​		主要就是git+node.js+hexo
-
-<!--next-->
 
 ## 二、多终端部署
 
@@ -43,10 +43,6 @@ git checkout hexo  #切换到hexo分支上
 git remote add origin https://github.com/LoganSun720/LoganSun720.github.io.git #将本地与Github项目对接
 git push origin hexo  #push到Github项目的hexo分支上
 ```
-
-结果如下：
-
-![基础部署结果状态] https://github.com/LoganSun720/LoganSun720.github.io/blob/master/images/image-20191220134700560.png)
 
 ​		这样github就会多出一个名为hexo的分支
 
@@ -98,3 +94,4 @@ git commit -m "XX"  #提醒之后的自己这次更改是什么
 git push origin hexo  #推送到远程仓库，更新hexo分支
 ```
 
+#### 附：当然为了使博客生效 每次可以先用hexo三连来预览，并用`hexo d`来部署，最后在用(二)中的后三步来更新到github
