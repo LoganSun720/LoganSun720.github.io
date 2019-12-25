@@ -46,19 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+  <meta name="description" content="1.制作启动盘​        并不需要制作U盘启动盘的工具，只需要用linux的一行命令和操作系统的iso文件就行。(理论上任何操作系统都可以) 注：U盘最好提前格式化为FAT32格式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2019/12/19/hello-world/index.html">
+<meta property="og:title" content="parrot OS安装及初体验">
+<meta property="og:url" content="http://yoursite.com/2019/12/21/parrot-OS%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E4%BD%93%E9%AA%8C/index.html">
 <meta property="og:site_name" content="Gargantua">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="1.制作启动盘​        并不需要制作U盘启动盘的工具，只需要用linux的一行命令和操作系统的iso文件就行。(理论上任何操作系统都可以) 注：U盘最好提前格式化为FAT32格式">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2019-12-19T13:45:24.961Z">
-<meta property="article:modified_time" content="2019-12-19T14:04:34.878Z">
+<meta property="article:published_time" content="2019-12-21T14:18:17.000Z">
+<meta property="article:modified_time" content="2019-12-22T02:11:21.298Z">
 <meta property="article:author" content="sunyf">
+<meta property="article:tag" content="hacker">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/19/hello-world/">
+<link rel="canonical" href="http://yoursite.com/2019/12/21/parrot-OS%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E4%BD%93%E9%AA%8C/">
 
 
 <script id="page-configurations">
@@ -70,7 +71,7 @@
   };
 </script>
 
-  <title>Hello World | Gargantua</title>
+  <title>parrot OS安装及初体验 | Gargantua</title>
   
 
 
@@ -175,7 +176,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/19/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/21/parrot-OS%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E4%BD%93%E9%AA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -188,7 +189,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hello World
+          parrot OS安装及初体验
         </h1>
 
         <div class="post-meta">
@@ -197,10 +198,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2019-12-19 21:45:24 / Modified: 22:04:34" itemprop="dateCreated datePublished" datetime="2019-12-19T21:45:24+08:00">2019-12-19</time>
+              <time title="Created: 2019-12-21 22:18:17" itemprop="dateCreated datePublished" datetime="2019-12-21T22:18:17+08:00">2019-12-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-22 10:11:21" itemprop="dateModified" datetime="2019-12-22T10:11:21+08:00">2019-12-22</time>
+              </span>
 
           
 
@@ -213,21 +220,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+        <h3 id="1-制作启动盘"><a href="#1-制作启动盘" class="headerlink" title="1.制作启动盘"></a>1.制作启动盘</h3><p>​        并不需要制作U盘启动盘的工具，只需要用<code>linux</code>的一行命令和操作系统的<code>iso</code>文件就行。(理论上任何操作系统都可以)</p>
+<p>注：U盘最好提前格式化为FAT32格式</p>
 <a id="more"></a>
 
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-首先确定U盘路径"><a href="#1-首先确定U盘路径" class="headerlink" title="(1)首先确定U盘路径"></a>(1)首先确定U盘路径</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>命令作用是显示所有存储设备路径</p>
+<h4 id="2-umount目标U盘"><a href="#2-umount目标U盘" class="headerlink" title="(2)umount目标U盘"></a>(2)<code>umount</code>目标U盘</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo umount /dev/sda*</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>这里<code>sda</code>是上面一步中目标U盘的路径，<code>sda*</code>是将其下所有分区都<code>umount</code></p>
+<h4 id="3-dd命令制作启动盘"><a href="#3-dd命令制作启动盘" class="headerlink" title="(3)dd命令制作启动盘"></a>(3)<code>dd</code>命令制作启动盘</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dd <span class="keyword">if</span>=*/Parrot-security-4.7_x64.iso of=/dev/sdb bs=4M</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<pre><code>其中if是`input file`(放置iso文件的位置)，of是`output file`(启动盘的磁盘位置)，`bs=4M` 是将数据块大小设为4M，每个数据块只能存一个文件的数据，可以缺省。</code></pre><p>Warning：使用 DD 命令制作启动盘将会占用整个U盘的空间</p>
+<h3 id="2-系统安装"><a href="#2-系统安装" class="headerlink" title="2.系统安装"></a>2.系统安装</h3><p>(1)进入安装页面后选择<strong>install</strong>就行，第一个模式是”Live Mode”启动模式，这样也是可以直接启动的，不需要经过安装步骤，可以先预览一下此系统是怎么样的。</p>
+<p>(2)为了安装方便，我们选择图形界面，只需要选择<strong>Install with GTK GUI</strong>，再回车。</p>
+<p>(3)到了这一步后，选择语言，只需要选择<strong>English</strong>。尽量不要选择中文，因为有时候翻译不准或者有的没有翻译，想搞技术英语是必须过关的，再点击<strong>Continue</strong>。</p>
+<p>(4)选择你的地区<strong>China</strong>，再点击<strong>Continue</strong>。</p>
+<p>(5)选择键盘布局时也选择英语的就行，使用起来不会出现问题。</p>
+<p>(6)设置<strong>管理员</strong>用户名和密码，密码一定要记住。</p>
+<p>(7)设置<strong>普通用户账号</strong>新用户的<strong>全名</strong>、<strong>用户名</strong>和<strong>密码</strong>。</p>
+<p>(8)磁盘分区，选择<strong>向导-使用整个磁盘</strong>(因为我这台电脑只装这一个系统)。</p>
+<p>(9)<strong>分区方案</strong>，我这为了快速，就直接选择<strong>将所有文件放在同一分区中（推荐新手使用）</strong>。</p>
+<p>(10)<strong>结束分区设定并将修改写入磁盘</strong>。</p>
+<p>(11)您是否想返回分区菜单？<strong>否</strong>；将改动写入磁盘吗？<strong>是</strong>。安装结束。</p>
 
     </div>
 
@@ -236,6 +252,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hacker/" rel="tag"># hacker</a>
+          </div>
 
         
 
@@ -243,12 +262,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/19/%E5%A4%9A%E6%8E%A7%E5%88%B6%E5%99%A8%E5%AE%9E%E7%8E%B0-zookeeper+ryu/" rel="prev" title="基于zookeeper的Ryu多控制器实现过程全纪录">
-      <i class="fa fa-chevron-left"></i> 基于zookeeper的Ryu多控制器实现过程全纪录
+    <a href="/2019/12/20/OVS%E4%BA%A4%E6%8D%A2%E6%9C%BA%E8%BF%9E%E6%8E%A5%E5%A4%9A%E6%8E%A7%E5%88%B6%E5%99%A8/" rel="prev" title="OVS交换机连接多控制器">
+      <i class="fa fa-chevron-left"></i> OVS交换机连接多控制器
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/12/19/hexo%E5%8D%9A%E5%AE%A2%E5%A4%9A%E7%BB%88%E7%AB%AF%E5%90%8C%E6%AD%A5/" rel="next" title="hexo博客搭建">
-      hexo博客搭建 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/12/22/zookeeper%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/" rel="next" title="zookeeper快速上手">
+      zookeeper快速上手 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -309,7 +328,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-制作启动盘"><span class="nav-number">1.</span> <span class="nav-text">1.制作启动盘</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-首先确定U盘路径"><span class="nav-number">1.1.</span> <span class="nav-text">(1)首先确定U盘路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-umount目标U盘"><span class="nav-number">1.2.</span> <span class="nav-text">(2)umount目标U盘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-dd命令制作启动盘"><span class="nav-number">1.3.</span> <span class="nav-text">(3)dd命令制作启动盘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-系统安装"><span class="nav-number">2.</span> <span class="nav-text">2.系统安装</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

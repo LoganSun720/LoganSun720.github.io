@@ -48,16 +48,15 @@
 
   <meta name="description" content="基础分布式锁通过zookeeper的分布式锁来实现一个交换机只会被一个控制器所控制，参考康奈尔大学的一个项目">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多控制器实现-zookeeper+ryu">
+<meta property="og:title" content="基于zookeeper的Ryu多控制器实现过程全纪录">
 <meta property="og:url" content="http://yoursite.com/2019/12/19/%E5%A4%9A%E6%8E%A7%E5%88%B6%E5%99%A8%E5%AE%9E%E7%8E%B0-zookeeper+ryu/index.html">
-<meta property="og:site_name" content="Yifei">
+<meta property="og:site_name" content="Gargantua">
 <meta property="og:description" content="基础分布式锁通过zookeeper的分布式锁来实现一个交换机只会被一个控制器所控制，参考康奈尔大学的一个项目">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-12-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2019-12-19T06:42:05.755Z">
+<meta property="article:modified_time" content="2019-12-25T01:59:14.907Z">
 <meta property="article:author" content="sunyf">
-<meta property="article:tag" content="ryu">
-<meta property="article:tag" content="zookeeper">
+<meta property="article:tag" content="SDN">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/19/%E5%A4%9A%E6%8E%A7%E5%88%B6%E5%99%A8%E5%AE%9E%E7%8E%B0-zookeeper+ryu/">
@@ -72,7 +71,7 @@
   };
 </script>
 
-  <title>多控制器实现-zookeeper+ryu | Yifei</title>
+  <title>基于zookeeper的Ryu多控制器实现过程全纪录 | Gargantua</title>
   
 
 
@@ -103,6 +102,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="Gargantua" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -116,7 +116,7 @@
     <div>
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Yifei</span>
+        <span class="site-title">Gargantua</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -185,11 +185,11 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yifei">
+      <meta itemprop="name" content="Gargantua">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          多控制器实现-zookeeper+ryu
+          基于zookeeper的Ryu多控制器实现过程全纪录
         </h1>
 
         <div class="post-meta">
@@ -198,10 +198,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2019-12-19 00:00:00 / Modified: 14:42:05" itemprop="dateCreated datePublished" datetime="2019-12-19T00:00:00+08:00">2019-12-19</time>
+              <time title="Created: 2019-12-19 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-19T00:00:00+08:00">2019-12-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-25 09:59:14" itemprop="dateModified" datetime="2019-12-25T09:59:14+08:00">2019-12-25</time>
+              </span>
 
           
 
@@ -216,6 +222,41 @@
       
         <h2 id="基础分布式锁"><a href="#基础分布式锁" class="headerlink" title="基础分布式锁"></a>基础分布式锁</h2><p>通过zookeeper的分布式锁来实现一个交换机只会被一个控制器所控制，参考康奈尔大学的一个<a href="https://github.com/coscin/coscin-app-ryu.git" target="_blank" rel="noopener">项目</a></p>
 <a id="more"></a>
+
+<p><strong>问题：</strong>没有连接交换机的时候，控制器就会有交换机的提示，显示连接了三个交换机，且地址是本地(127.0.0.1)</p>
+<p>经过验证，自带的<code>ryu-manager --verbose</code>也出现这个问题，发现是Mininet进程在后台运行(即使是电脑重启它也会跟随系统启动)。</p>
+<p><strong>解决：</strong>用<code>sudo mn -c</code>命令即可将后台的Mininet进程clean and exit</p>
+<h4 id="在服务器上开启zookeeper服务器"><a href="#在服务器上开启zookeeper服务器" class="headerlink" title="在服务器上开启zookeeper服务器"></a>在服务器上开启zookeeper服务器</h4><p>实验阶段用常开的台式机中的Ubuntu虚拟机部署<code>standalone</code>模式下的服务器：(zookeeper安装教程不再赘述)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zkServer.sh start-foreground ./conf/zoo.cfg</span><br></pre></td></tr></table></figure>
+
+<p><code>start-foreground</code>是将启动日志在屏幕上打出来，在<code>./conf/zoo.cfg</code>(下载安装zookeeper的文件夹下的配置文件)中将最重要的<code>dataDir</code>、<code>clientPort</code>设置好(如果要用quorum模式，则需要在最下面添加server地址和端口)</p>
+<p><em>注意：</em>如果出现地址端口已经被占用问题可以用一下命令修改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo netstat -ap | grep 2181</span><br></pre></td></tr></table></figure>
+
+<p>此命令检查出正在使用2181端口的进程，进而终止</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">kill</span> -9 PID_num</span><br></pre></td></tr></table></figure>
+
+<h4 id="控制器启动："><a href="#控制器启动：" class="headerlink" title="控制器启动："></a>控制器启动：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ryu-manager --verbose -ofp-tcp-listen-port 6653 ./coscin_app.py</span><br></pre></td></tr></table></figure>
+
+<p><strong>问题1：</strong>出现错误提示：<code>ImportError：Import by filename is not supported.</code>但是用pycharm来debug却没有问题。</p>
+<p><em>原因：</em>只能在ryu内部添加<code>coscin_app.py</code>等一系列脚本并运行添加后的整个ryu才行，因为在<code>coscin_app.py</code>程序中的<code>import</code>格式是相对于ryu内部的格式。  </p>
+<p><strong>解决：</strong>只需要更改<code>coscin_app.py</code>内部<code>import</code>方式即可。</p>
+<p><strong>问题2：</strong>系统路径下的<code>ryu-manager</code>总是用python2.7</p>
+<p><strong>解决：</strong>通过<code>ls /usr/bin/python*</code>来查看系统可用的python版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1</span><br><span class="line">sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 2</span><br></pre></td></tr></table></figure>
+
+<p>此时再输入<code>python --version</code>检验可知版本应该已经切换到python3了，如果想要重新换回python则用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --config python</span><br></pre></td></tr></table></figure>
+
+<h4 id="openflow1-3中对于多控制器的描述"><a href="#openflow1-3中对于多控制器的描述" class="headerlink" title="openflow1.3中对于多控制器的描述"></a>openflow1.3中对于多控制器的描述</h4><p>​        交换机可以与单个控制器建立通信，或者可以与多个控制器建立通信。 拥有多个控制器可以提高可靠性，因为如果一个控制器或控制器连接失败，交换机可以继续在OpenFlow模式下运行。 控制器之间的切换完全由控制器本身管理，从而可以从故障中快速恢复，并实现控制器负载平衡。 控制器之间通过本说明书范围之外的机制来协调交换机之间的管理，并且多控制器功能的目的仅仅是帮助同步由控制器执行的控制器切换。 多控制器功能仅解决控制器故障转移和负载平衡问题，而不能解决无法在OpenFlow交换协议之外完成的虚拟化问题。</p>
+<p>​        启动OpenFlow操作时，交换机必须连接到配置了它的所有控制器，并尝试同时保持与所有控制器的连接。许多控制器可以将controllerto-switch命令发送到交换机，与这些命令相关的答复或错误消息必须仅在与该命令关联的控制器连接上发送。可能需要将异步消息发送到多个控制器，对于每个合格的OpenFlow通道，该消息将被复制，并且在相应的控制器连接允许时，将发送每个消息。</p>
+<p>​        控制器的默认角色是OFPCR_ROLE_EQUAL。在此角色中，控制器具有对交换机的完全访问权限，并且与处于同一角色的其他控制器相同。默认情况下，控制器会接收所有交换机异步消息（例如，输入数据包，删除流量）。控制器可以发送控制器到交换机的命令来修改交换机的状态。交换机在控制器之间不进行任何仲裁或资源共享。</p>
+<p>​        控制器可以请求将其角色更改为OFPCR_ROLE_SLAVE。在此角色下，控制器对交换机具有只读访问权限。默认情况下，除了端口状态消息外，控制器不接收交换机异步消息。控制器无法执行所有发送数据包或修改交换机状态的控制器到交换机命令。例如，必须拒绝OFPT_PACKET_OUT，OFPT_FLOW_MOD，OFPT_GROUP_MOD，OFPT_PORT_MOD，OFPT_TABLE_MOD请求以及具有非空主体的OFPMP_TABLE_FEATURES的多部分请求。</p>
+<p>​        当控制器有发出上述消息时，交换机必须使用OFPT_BAD_REQUEST的类型字段（OFPBRC_IS_SLAVE的代码字段）答复OFPT_ERROR消息。 其他仅查询数据的控制器到交换机的消息，例如OFPT_ROLE_REQUEST，OFPT_SET_ASYNC和OFPT_MULTIPART_REQUEST应该正常处理。</p>
+<p>​        控制器可以请求将其角色更改为OFPCR_ROLE_MASTER。该角色类似于OFPCR_ROLE_EQUAL，并且具有对交换机的完全访问权限，不同之处在于，该交换机确保它是该角色中的唯一控制器。当控制器将角色更改为OFPCR_ROLE_MASTER时，交换机会将角色为OFPCR_ROLE_MASTER的当前控制器更改为角色OFPCR_ROLE_SLAVE，但不影响角色为OFPCR_ROLE_EQUAL的控制器。当交换机执行此类角色更改时，不会向更改其角色的控制器生成任何消息（在大多数情况下，该控制器不再可访问）。每个控制器可以发送OFPT_ROLE_REQUEST消息以将其角色传达给交换机（请参阅7.3.9），并且交换机必须记住每个控制器连接的角色。如果消息中的generation_id是最新的，则控制器可以随时更改角色（请参见下文）。角色请求消息提供了一种轻量级的机制来帮助控制器主选举过程，控制器配置其角色，并且通常仍需要在它们之间进行协调。交换机无法自行更改控制器的状态，始终会根据其中一个控制器的请求更改控制器的状态。任何从控制器或相等控制器都可以选举自己为主。交换机可以同时连接到处于相等状态的多个控制器，处于从属状态的多个控制器以及处于主状态的一个控制器。处于“主”状态（如果有）的控制器和处于“相等”状态的所有控制器都可以完全更改交换机状态，没有任何机制可以在这些控制器之间强制进行交换机分区。如果具有“主”角色的控制器必须是唯一能够在交换机上进行更改的控制器，则任何控制器都不应处于“相等”状态，而所有其他控制器都应处于“从属”状态。控制器还可以控制通过其OpenFlow通道发送哪些类型的交换机异步消息，并更改上述默认值。这是通过“异步配置”消息（请参见6.1.1）完成的，列出了需要为特定OpenFlow通道启用或过滤（参见7.3.10）的每种消息类型的所有原因。使用此功能，不同的控制器可以接收不同的通知，处于主模式的控制器可以有选择地禁用它不关心的通知，而处于从模式的控制器可以启用它想要监视的通知。</p>
+<h4 id="将多控制器锁模块与信息备份模块结合"><a href="#将多控制器锁模块与信息备份模块结合" class="headerlink" title="将多控制器锁模块与信息备份模块结合"></a>将多控制器锁模块与信息备份模块结合</h4><p><em>需要同步的信息：拓扑信息，包含交换机、主控制器、链路以及备份控制器等信息</em></p>
+<p>备份过程见下图：</p>
+
     </div>
 
     
@@ -224,8 +265,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/ryu/" rel="tag"># ryu</a>
-              <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+              <a href="/tags/SDN/" rel="tag"># SDN</a>
           </div>
 
         
@@ -297,7 +337,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础分布式锁"><span class="nav-number">1.</span> <span class="nav-text">基础分布式锁</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础分布式锁"><span class="nav-number">1.</span> <span class="nav-text">基础分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在服务器上开启zookeeper服务器"><span class="nav-number">1.0.1.</span> <span class="nav-text">在服务器上开启zookeeper服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#控制器启动："><span class="nav-number">1.0.2.</span> <span class="nav-text">控制器启动：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#openflow1-3中对于多控制器的描述"><span class="nav-number">1.0.3.</span> <span class="nav-text">openflow1.3中对于多控制器的描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将多控制器锁模块与信息备份模块结合"><span class="nav-number">1.0.4.</span> <span class="nav-text">将多控制器锁模块与信息备份模块结合</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -311,14 +351,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
