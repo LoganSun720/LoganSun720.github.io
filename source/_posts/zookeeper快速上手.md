@@ -18,6 +18,12 @@ zkCli.sh -server localhost:2181
 ls -R /
 ```
 
+增加、删除、改变节点
+
+```bash
+create [路径]/delete [路径]/set [路径] [值]
+```
+
 
 
 #### 四字命令
