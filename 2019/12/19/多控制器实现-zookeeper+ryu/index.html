@@ -54,7 +54,7 @@
 <meta property="og:description" content="基础分布式锁通过zookeeper的分布式锁来实现一个交换机只会被一个控制器所控制，参考康奈尔大学的一个项目">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-12-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2019-12-25T01:59:14.907Z">
+<meta property="article:modified_time" content="2019-12-30T01:33:25.155Z">
 <meta property="article:author" content="sunyf">
 <meta property="article:tag" content="SDN">
 <meta name="twitter:card" content="summary">
@@ -206,7 +206,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-25 09:59:14" itemprop="dateModified" datetime="2019-12-25T09:59:14+08:00">2019-12-25</time>
+                <time title="Modified: 2019-12-30 09:33:25" itemprop="dateModified" datetime="2019-12-30T09:33:25+08:00">2019-12-30</time>
               </span>
 
           
@@ -255,7 +255,14 @@
 <p>​        当控制器有发出上述消息时，交换机必须使用OFPT_BAD_REQUEST的类型字段（OFPBRC_IS_SLAVE的代码字段）答复OFPT_ERROR消息。 其他仅查询数据的控制器到交换机的消息，例如OFPT_ROLE_REQUEST，OFPT_SET_ASYNC和OFPT_MULTIPART_REQUEST应该正常处理。</p>
 <p>​        控制器可以请求将其角色更改为OFPCR_ROLE_MASTER。该角色类似于OFPCR_ROLE_EQUAL，并且具有对交换机的完全访问权限，不同之处在于，该交换机确保它是该角色中的唯一控制器。当控制器将角色更改为OFPCR_ROLE_MASTER时，交换机会将角色为OFPCR_ROLE_MASTER的当前控制器更改为角色OFPCR_ROLE_SLAVE，但不影响角色为OFPCR_ROLE_EQUAL的控制器。当交换机执行此类角色更改时，不会向更改其角色的控制器生成任何消息（在大多数情况下，该控制器不再可访问）。每个控制器可以发送OFPT_ROLE_REQUEST消息以将其角色传达给交换机（请参阅7.3.9），并且交换机必须记住每个控制器连接的角色。如果消息中的generation_id是最新的，则控制器可以随时更改角色（请参见下文）。角色请求消息提供了一种轻量级的机制来帮助控制器主选举过程，控制器配置其角色，并且通常仍需要在它们之间进行协调。交换机无法自行更改控制器的状态，始终会根据其中一个控制器的请求更改控制器的状态。任何从控制器或相等控制器都可以选举自己为主。交换机可以同时连接到处于相等状态的多个控制器，处于从属状态的多个控制器以及处于主状态的一个控制器。处于“主”状态（如果有）的控制器和处于“相等”状态的所有控制器都可以完全更改交换机状态，没有任何机制可以在这些控制器之间强制进行交换机分区。如果具有“主”角色的控制器必须是唯一能够在交换机上进行更改的控制器，则任何控制器都不应处于“相等”状态，而所有其他控制器都应处于“从属”状态。控制器还可以控制通过其OpenFlow通道发送哪些类型的交换机异步消息，并更改上述默认值。这是通过“异步配置”消息（请参见6.1.1）完成的，列出了需要为特定OpenFlow通道启用或过滤（参见7.3.10）的每种消息类型的所有原因。使用此功能，不同的控制器可以接收不同的通知，处于主模式的控制器可以有选择地禁用它不关心的通知，而处于从模式的控制器可以启用它想要监视的通知。</p>
 <h4 id="将多控制器锁模块与信息备份模块结合"><a href="#将多控制器锁模块与信息备份模块结合" class="headerlink" title="将多控制器锁模块与信息备份模块结合"></a>将多控制器锁模块与信息备份模块结合</h4><p><em>需要同步的信息：拓扑信息，包含交换机、主控制器、链路以及备份控制器等信息</em></p>
-<p>备份过程见下图：</p>
+<p><strong><em>1.将有变动的拓扑同步至ryu控制器</em></strong></p>
+<p><strong>问题1：</strong>topology下面的数据出现变化时没有反应</p>
+<p>原因：没有通过kazoo监控修改节点事件</p>
+<p>解决：<code>@DataWatch(client=zk_client.zkc, path=zk_path)</code>中不要设置返回函数，并且在watcher函数中监听节点和节点值后面加上不断循环</p>
+<p><strong>问题2：</strong>在主模块中不能只是单纯调用子模块来实现目标</p>
+<p>原因：如果子模块中有循环获取最新状态的操作，则不会回到主模块中。实际上，我们需要的是运行状态时子模块的实例，而<code>import</code>无法做到这一点。</p>
+<p>解决：利用Ryu中的模块调用思路</p>
+<p><strong><em>2.</em></strong></p>
 
     </div>
 
