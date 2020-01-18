@@ -54,7 +54,7 @@
 <meta property="og:description" content="基础分布式锁通过zookeeper的分布式锁来实现一个交换机只会被一个控制器所控制，参考康奈尔大学的一个项目">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-12-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2019-12-30T01:33:25.155Z">
+<meta property="article:modified_time" content="2020-01-18T05:40:21.384Z">
 <meta property="article:author" content="sunyf">
 <meta property="article:tag" content="SDN">
 <meta name="twitter:card" content="summary">
@@ -206,7 +206,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-30 09:33:25" itemprop="dateModified" datetime="2019-12-30T09:33:25+08:00">2019-12-30</time>
+                <time title="Modified: 2020-01-18 13:40:21" itemprop="dateModified" datetime="2020-01-18T13:40:21+08:00">2020-01-18</time>
               </span>
 
           
@@ -261,7 +261,17 @@
 <p>解决：<code>@DataWatch(client=zk_client.zkc, path=zk_path)</code>中不要设置返回函数，并且在watcher函数中监听节点和节点值后面加上不断循环</p>
 <p><strong>问题2：</strong>在主模块中不能只是单纯调用子模块来实现目标</p>
 <p>原因：如果子模块中有循环获取最新状态的操作，则不会回到主模块中。实际上，我们需要的是运行状态时子模块的实例，而<code>import</code>无法做到这一点。</p>
-<p>解决：利用Ryu中的模块调用思路</p>
+<p>解决：由于目前数据更新和下载模块不属于Ryu模块，所以不能用Ryu模块交流办法，只能将非死循环部分留下，死循环部分拿到主程序</p>
+<p><strong>问题3：</strong><code>assert app.name not in SERVICE_BRICKS AssertionError</code></p>
+<p>解决：<code>_CONTEXTS</code>放在了类的定义内部，导致主函数<code>coscin_app.py</code>读不到App<code>network_awareness_ori</code>的注册信息，只需要移至累的定义最外面即可</p>
+<p><strong>问题4：</strong><code>oslo_config.cfg.NoSuchOptError: no such option k_paths in group [DEFAULT]</code></p>
+<p>原因：李呈大神的代码中对整体Ryu(就是pip的python包)都进行了更改</p>
+<p><strong>问题5：</strong><code>OFPErrorMsg received: type=0x01 code=0x0a message=......</code></p>
+<p>解决：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># enum ofp_error_type</span></span><br><span class="line">OFPET_BAD_REQUEST = <span class="number">1</span>               <span class="comment"># Request was not understood.</span></span><br><span class="line">OFPBRC_IS_SLAVE = <span class="number">10</span>                    <span class="comment"># Denied because controller is slave.</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>问题6：</strong>pip安装没有<code>mininet</code></p>
+<p>解决：把<code>mininet</code>下载下来的源码文件夹放到Ubuntu的<code>/usr/local/lib/python3.6/dist-packages</code>文件夹下</p>
 <p><strong><em>2.</em></strong></p>
 
     </div>
@@ -390,7 +400,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
