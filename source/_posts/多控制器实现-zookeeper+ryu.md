@@ -97,7 +97,31 @@ sudo update-alternatives --config python
 
 原因：如果子模块中有循环获取最新状态的操作，则不会回到主模块中。实际上，我们需要的是运行状态时子模块的实例，而`import`无法做到这一点。
 
-解决：利用Ryu中的模块调用思路
+解决：由于目前数据更新和下载模块不属于Ryu模块，所以不能用Ryu模块交流办法，只能将非死循环部分留下，死循环部分拿到主程序
+
+**问题3：**`assert app.name not in SERVICE_BRICKS AssertionError`
+
+解决：`_CONTEXTS`放在了类的定义内部，导致主函数`coscin_app.py`读不到App`network_awareness_ori`的注册信息，只需要移至累的定义最外面即可
+
+**问题4：**`oslo_config.cfg.NoSuchOptError: no such option k_paths in group [DEFAULT]`
+
+原因：李呈大神的代码中对整体Ryu(就是pip的python包)都进行了更改
+
+**问题5：**`OFPErrorMsg received: type=0x01 code=0x0a message=......`
+
+解决：
+
+```python
+# enum ofp_error_type
+OFPET_BAD_REQUEST = 1               # Request was not understood.
+OFPBRC_IS_SLAVE = 10                    # Denied because controller is slave.
+```
+
+**问题6：**pip安装没有`mininet`
+
+解决：把`mininet`下载下来的源码文件夹放到Ubuntu的`/usr/local/lib/python3.6/dist-packages`文件夹下
+
+
 
 ***2.***
 

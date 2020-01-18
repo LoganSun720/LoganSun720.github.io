@@ -52,7 +52,7 @@ git push origin hexo  #push到Github项目的hexo分支上
 
 ```powershell
 git clone -b hexo https://github.com/LoganSun720/LoganSun720.github.io.git
-cd oceandlnu.github.io  #切换到刚刚clone的文件夹内
+cd logansun720.github.io  #切换到刚刚clone的文件夹内
 npm install  #注意，这里一定要切换到刚刚clone的文件夹内执行，安装必要的所需组件，不用再hexo init
 ```
 
